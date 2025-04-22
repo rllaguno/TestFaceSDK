@@ -15,7 +15,7 @@ struct FaceCaptureView: View {
       Button {
         face.showFaceCapture()
       } label: {
-        Text("Captura Facial")
+        Text("Iniciar captura facial")
           .foregroundStyle(.blue)
       }
       .task {

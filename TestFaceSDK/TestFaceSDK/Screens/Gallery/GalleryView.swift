@@ -19,12 +19,18 @@ struct GalleryView: View {
       if face.galleryImage == nil {
         PhotosPicker("Selecciona una imagen con tu rostro", selection: $face.pickerItem, matching: .images)
       } else {
-        if let image = face.galleryImage {
-          image
-            .resizable()
-            .scaledToFit()
-            .rotationEffect(.degrees(90))
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+        if let uiImage = face.galleryImage {
+          VStack(spacing: 10) {
+            ImageHolder(uiImage: uiImage)
+            
+            Button {
+              face.galleryImage = nil
+              face.pickerItem = nil
+            } label: {
+              Text("Borrar imagen")
+                .foregroundStyle(.blue)
+            }
+          }
         }
       }
       
@@ -39,7 +45,9 @@ struct GalleryView: View {
     .padding()
     .onChange(of: face.pickerItem) {
       Task {
-        face.galleryImage = try await face.pickerItem?.loadTransferable(type: Image.self)
+        if let data = try? await face.pickerItem?.loadTransferable(type: Data.self), let uiImage = UIImage(data: data) {
+          face.galleryImage = uiImage
+        }
       }
     }
   }

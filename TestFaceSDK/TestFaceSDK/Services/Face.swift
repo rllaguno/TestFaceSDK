@@ -16,7 +16,7 @@ class Face {
   var currentNavigation: NavigationIndex = .instructions
   
   var pickerItem: PhotosPickerItem?
-  var galleryImage: SwiftUICore.Image?
+  var galleryImage: UIImage?
   
   var isInitialized: Bool = false
   
@@ -27,6 +27,19 @@ class Face {
     }
   }
   var faceCaptureResultsReady: Bool = false
+  
+  var matchFaceResponse: MatchFacesResponse? {
+    didSet {
+      matchFaceResponseReady = matchFaceResponse != nil
+      
+      guard let similarity = matchFaceResponse?.results.first?.similarity?.doubleValue else {
+        return
+      }
+      similarityPercentage = Int(similarity * 100)
+    }
+  }
+  var matchFaceResponseReady: Bool = false
+  var similarityPercentage: Int = 0
   
   private var cancellables: Set<AnyCancellable> = .init()
   
@@ -56,6 +69,37 @@ class Face {
       self.faceCaptureResponse = response
     }
   }
+  
+  func makeComparison() {
+    guard let faceCaptureImage = faceCaptureResponse?.image else {
+      return
+    }
+    guard let photoGalleryImage = galleryImage else {
+      return
+    }
+    
+    let images = [
+      MatchFacesImage(image: faceCaptureImage.image, imageType: .live),
+      MatchFacesImage(image: photoGalleryImage, imageType: .live),
+    ]
+    
+    let request = MatchFacesRequest(images: images)
+    
+    FaceSDK.service.matchFaces(request, completion: { response in
+      self.matchFaceResponse = response
+    })
+  }
+  
+  func reset() {
+    pickerItem = nil
+    galleryImage = nil
+    faceCaptureResponse = nil
+    faceCaptureResultsReady = false
+    matchFaceResponse = nil
+    matchFaceResponseReady = false
+    similarityPercentage = 0
+  }
+
   
 }
 
