@@ -8,10 +8,16 @@
 import Foundation
 import Combine
 import FaceSDK
+import SwiftUI
+import PhotosUI
 
 @Observable
 class Face {
   var currentNavigation: NavigationIndex = .instructions
+  
+  var pickerItem: PhotosPickerItem?
+  var galleryImage: SwiftUICore.Image?
+  
   var isInitialized: Bool = false
   
   var faceCaptureResponse: FaceCaptureResponse? {

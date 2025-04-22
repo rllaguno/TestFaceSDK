@@ -19,17 +19,12 @@ struct NavigationView: View {
           
         case .faceCapture:
           FaceCaptureView(face: $face)
-            .onChange(of: face.faceCaptureResultsReady) { newValue, _ in
-              if newValue {
-                face.currentNavigation = .gallery
-              }
-            }
           
         case .gallery:
-          ProgressView()
+          GalleryView(face: $face)
           
         case .comparison:
-          ProgressView()
+          ComparisonView(face: $face)
         }
       } else {
         ProgressView()
