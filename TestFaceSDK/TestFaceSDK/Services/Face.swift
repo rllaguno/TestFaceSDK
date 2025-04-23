@@ -78,7 +78,11 @@ class Face {
       return
     }
     
-    FaceSDK.service.presentFaceCaptureViewController(from: presenter, animated: true) { response in
+    let configuration = FaceCaptureConfiguration {
+      $0.isCameraSwitchButtonEnabled = true
+    }
+    
+    FaceSDK.service.presentFaceCaptureViewController(from: presenter, animated: true, configuration: configuration) { response in
       self.faceCaptureResponse = response
     }
   }
