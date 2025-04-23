@@ -21,7 +21,7 @@ struct GalleryView: View {
       } else {
         if let uiImage = face.galleryImage {
           VStack(spacing: 10) {
-            ImageHolder(uiImage: uiImage)
+            ImageHolder(uiImage: uiImage, title: "")
             
             Button {
               face.galleryImage = nil
@@ -40,7 +40,9 @@ struct GalleryView: View {
         face.currentNavigation = .comparison
       } label: {
         BlueButton(title: "Continuar")
+          .opacity(face.galleryImage == nil ? 0.5 : 1.0)
       }
+      .disabled(face.galleryImage == nil)
     }
     .padding()
     .onChange(of: face.pickerItem) {

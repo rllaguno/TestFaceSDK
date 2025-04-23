@@ -58,6 +58,19 @@ class Face {
     } receiveValue: { _ in
       
     }.store(in: &cancellables)
+    
+    let uiConfiguration = UIConfiguration {
+      $0.setColor(.blue, forItem: .CameraScreenFrontHintLabelText)
+      $0.setFont(.systemFont(ofSize: 20.0, weight: .semibold), forItem: .CameraScreenHintLabel)
+      $0.setColor(.white, forItem: .CameraScreenFrontHintLabelBackground)
+      
+      $0.setColor(.blue, forItem: .CameraScreenStrokeActive)
+      $0.setColor(.blue, forItem: .CameraScreenStrokeNormal)
+      $0.setColor(.blue.withAlphaComponent(0.35), forItem: .CameraScreenSectorTarget)
+      $0.setColor(.blue, forItem: .CameraScreenSectorActive)
+    }
+    
+    FaceSDK.service.customization.configuration = uiConfiguration
   }
   
   func showFaceCapture() {
@@ -80,7 +93,7 @@ class Face {
     
     let images = [
       MatchFacesImage(image: faceCaptureImage.image, imageType: .live),
-      MatchFacesImage(image: photoGalleryImage, imageType: .live),
+      MatchFacesImage(image: photoGalleryImage, imageType: .external),
     ]
     
     let request = MatchFacesRequest(images: images)
@@ -99,7 +112,6 @@ class Face {
     matchFaceResponseReady = false
     similarityPercentage = 0
   }
-
   
 }
 

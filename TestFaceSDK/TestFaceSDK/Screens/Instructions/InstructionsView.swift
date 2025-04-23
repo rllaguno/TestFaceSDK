@@ -12,12 +12,11 @@ struct InstructionsView: View {
   
   var body: some View {
     VStack(spacing: 50) {
-      Spacer()
-      
       Text("Instrucciones")
         .font(.largeTitle.bold())
         .foregroundStyle(.primary)
       
+      Spacer()
       
       VStack(alignment: .leading, spacing: 5) {
         InstructionsBar(instruction: .capture)

@@ -19,7 +19,7 @@ struct FaceCaptureView: View {
           .foregroundStyle(.blue)
       }
       .task {
-        if face.faceCaptureResultsReady {
+        if face.faceCaptureResultsReady && face.faceCaptureResponse?.image?.image != nil {
           face.currentNavigation = .gallery
         }
       }

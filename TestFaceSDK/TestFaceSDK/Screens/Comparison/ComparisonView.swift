@@ -10,7 +10,7 @@ import SwiftUI
 struct ComparisonView: View {
   @Binding var face: Face
   @State private var completedLoading: Bool = false
-  let timer = Timer.publish(every: 2.5, on: .main, in: .common).autoconnect()
+  let timer = Timer.publish(every: 4, on: .main, in: .common).autoconnect()
   
   var body: some View {
     VStack {
@@ -24,11 +24,11 @@ struct ComparisonView: View {
         
         HStack(spacing: 10) {
           if let uiImageCapture = face.faceCaptureResponse?.image?.image {
-            ImageHolder(uiImage: uiImageCapture)
+            ImageHolder(uiImage: uiImageCapture, title: "Captura facial")
           }
           
           if let uiImageGallery = face.galleryImage {
-            ImageHolder(uiImage: uiImageGallery)
+            ImageHolder(uiImage: uiImageGallery, title: "Imagen de galería")
           }
         }
         
