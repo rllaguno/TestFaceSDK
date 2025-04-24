@@ -3,7 +3,7 @@
 ![Static Badge](https://img.shields.io/badge/built%20with-SwiftUI-lightblue)
 
 ## Descripción de la solución
-Para esta tarea, mi solución consiste en una aplicación desarrollada en SwiftUI para dispositivos iOS. Esta aplicaciónn permite la comparación biométrocia facial entre una imagen capturada en tiempo real utilizando herramientas de FaceSDK de Regula y una foto seleccionada de la galeria del usuario. La aplicación guía al usuario a través de un flujo claro y secuencial, ofreciendo instrucciones antes de comenzar el proceso.
+Para esta tarea, mi solución consiste en una aplicación desarrollada en SwiftUI para dispositivos iOS. Esta aplicación permite la comparación biométrica facial entre una imagen capturada en tiempo real utilizando la herramientas de FaceSDK de Regula y una foto seleccionada de la galeria del usuario. La aplicación guía al usuario a través de un flujo claro y secuencial, ofreciendo instrucciones antes de comenzar el proceso.
 A través del interfaz el usuario puede:
 - Leer las indicaciones e iniciar el proceso.
 - Capturar una imagen facial a través de la cámara.
@@ -21,9 +21,6 @@ A través del interfaz el usuario puede:
 **Encapsulamiento**
 - Las vistas solo interactúan con la clase Face a través de su interfaz pública (propiedades y métodos), sin necesidad de conocer los detalles internos de cómo se comunica con el SDK. Incluso solo se exponen los datos y metodos necesarios, asi se asegura un mejor control de acceso y un mantenimiento simplificado.
 
-**Navegación con estados**
-- Control de navegación basado en estados mediante un enum NavigationIndex y un switch en la vista principal.
-
 ## Decisiones técnicas destacadas
 **Navegación centralizada**
 - La navegación se maneja de manera centralizada a través de un enum con cambio de estados manejado por el objeto observable.
@@ -40,7 +37,7 @@ A través del interfaz el usuario puede:
 ## Mejoras
 1. Botón de salir durante el proceso para cancelar el flujo.
 2. Mejor manejo de imágenes en horizontal.
-3. División en componentes más especializados para arquitectura VOODO.
+3. División de componentes más especializados para arquitectura VOODO.
 4. Bug donde si se presiona volver a inicio antes de que este listo el resultado, se muestra resultado anterior antes de actualizar el nuevo resultado en la proxima ronda.
 6. Localización
    
