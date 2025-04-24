@@ -9,23 +9,25 @@ import SwiftUI
 import PhotosUI
 
 struct GalleryView: View {
-  @Binding var face: Face
+  @Binding var currentNavigation: NavigationIndex
+  @Binding var pickerItem: PhotosPickerItem?
+  @Binding var galleryImage: UIImage?
   
   var body: some View {
     VStack {
       
       Spacer()
       
-      if face.galleryImage == nil {
-        PhotosPicker("Selecciona una imagen con tu rostro", selection: $face.pickerItem, matching: .images)
+      if galleryImage == nil {
+        PhotosPicker("Selecciona una imagen con tu rostro", selection: $pickerItem, matching: .images)
       } else {
-        if let uiImage = face.galleryImage {
+        if let uiImage = galleryImage {
           VStack(spacing: 10) {
             ImageHolder(uiImage: uiImage, title: "")
             
             Button {
-              face.galleryImage = nil
-              face.pickerItem = nil
+              galleryImage = nil
+              pickerItem = nil
             } label: {
               Text("Borrar imagen")
                 .foregroundStyle(.blue)
@@ -37,24 +39,20 @@ struct GalleryView: View {
       Spacer()
       
       Button {
-        face.currentNavigation = .comparison
+        currentNavigation = .comparison
       } label: {
         BlueButton(title: "Continuar")
-          .opacity(face.galleryImage == nil ? 0.5 : 1.0)
+          .opacity(galleryImage == nil ? 0.5 : 1.0)
       }
-      .disabled(face.galleryImage == nil)
+      .disabled(galleryImage == nil)
     }
     .padding()
-    .onChange(of: face.pickerItem) {
+    .onChange(of: pickerItem) {
       Task {
-        if let data = try? await face.pickerItem?.loadTransferable(type: Data.self), let uiImage = UIImage(data: data) {
-          face.galleryImage = uiImage
+        if let data = try? await pickerItem?.loadTransferable(type: Data.self), let uiImage = UIImage(data: data) {
+          galleryImage = uiImage
         }
       }
     }
   }
-}
-
-#Preview {
-  GalleryView(face: .constant(Face()))
 }

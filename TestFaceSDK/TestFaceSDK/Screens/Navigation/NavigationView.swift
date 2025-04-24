@@ -14,17 +14,17 @@ struct NavigationView: View {
     ZStack {
       switch face.currentNavigation {
       case .instructions:
-        InstructionsView(face: $face)
+        InstructionsView(currentNavigation: $face.currentNavigation, initialize: face.initialize)
         
       case .faceCapture:
         if face.isInitialized {
-          FaceCaptureView(face: $face)
+          FaceCaptureView(currentNavigation: $face.currentNavigation, faceCaptureResultsReady: $face.faceCaptureResultsReady, faceCaptureResponse: $face.faceCaptureResponse, showFaceCapture: face.showFaceCapture)
         } else {
           ProgressView()
         }
         
       case .gallery:
-        GalleryView(face: $face)
+        GalleryView(currentNavigation: $face.currentNavigation, pickerItem: $face.pickerItem, galleryImage: $face.galleryImage)
         
       case .comparison:
         ComparisonView(face: $face)

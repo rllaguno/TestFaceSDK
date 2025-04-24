@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct InstructionsView: View {
-  @Binding var face: Face
+  @Binding var currentNavigation: NavigationIndex
+  var initialize: () -> Void
   
   var body: some View {
     VStack(spacing: 50) {
@@ -27,8 +28,8 @@ struct InstructionsView: View {
       Spacer()
       
       Button{
-        face.initialize()
-        face.currentNavigation = .faceCapture
+        initialize()
+        currentNavigation = .faceCapture
       } label: {
         BlueButton(title: "Iniciar")
       }
@@ -36,8 +37,4 @@ struct InstructionsView: View {
     }
     .padding()
   }
-}
-
-#Preview {
-  InstructionsView(face: .constant(Face()))
 }

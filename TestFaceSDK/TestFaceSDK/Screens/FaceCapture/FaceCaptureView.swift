@@ -6,28 +6,28 @@
 //
 
 import SwiftUI
+import FaceSDK
 
 struct FaceCaptureView: View {
-  @Binding var face: Face
+  @Binding var currentNavigation: NavigationIndex
+  @Binding var faceCaptureResultsReady: Bool
+  @Binding var faceCaptureResponse: FaceCaptureResponse?
+  var showFaceCapture: () -> Void
   
   var body: some View {
     VStack {
       Button {
-        face.showFaceCapture()
+        showFaceCapture()
       } label: {
         Text("Iniciar captura facial")
           .foregroundStyle(.blue)
       }
       .task {
-        if face.faceCaptureResultsReady && face.faceCaptureResponse?.image?.image != nil {
-          face.currentNavigation = .gallery
+        if faceCaptureResultsReady && faceCaptureResponse?.image?.image != nil {
+          currentNavigation = .gallery
         }
       }
     }
     .padding()
   }
-}
-
-#Preview {
-  FaceCaptureView(face: .constant(Face()))
 }
