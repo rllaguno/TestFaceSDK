@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 import FaceSDK
 import SwiftUI
 import PhotosUI
@@ -14,23 +13,29 @@ import PhotosUI
 @Observable
 class Face {
   var currentNavigation: NavigationIndex = .instructions
-  
+  var isInitialized: Bool = false
+
+  //Gallery Image variables
   var pickerItem: PhotosPickerItem?
   var galleryImage: UIImage?
   
-  var isInitialized: Bool = false
-  
+  //Face Capture Image Variables
+  var faceCaptureResultsReady: Bool = false
   var faceCaptureResponse: FaceCaptureResponse? {
     didSet {
       // Triggers whenever faceCaptureResponse changes
       faceCaptureResultsReady = faceCaptureResponse != nil
     }
   }
-  var faceCaptureResultsReady: Bool = false
   
+  //Match Face Variables
+  var similarityPercentage: Int = 0
+  var matchFaceResponseReady: Bool = false
   var matchFaceResponse: MatchFacesResponse? {
     didSet {
-      matchFaceResponseReady = matchFaceResponse != nil
+      withAnimation(.easeOut(duration: 1.5)) {
+        matchFaceResponseReady = matchFaceResponse != nil
+      }
       
       guard let similarity = matchFaceResponse?.results.first?.similarity?.doubleValue else {
         return
@@ -38,26 +43,15 @@ class Face {
       similarityPercentage = Int(similarity * 100)
     }
   }
-  var matchFaceResponseReady: Bool = false
-  var similarityPercentage: Int = 0
   
-  private var cancellables: Set<AnyCancellable> = .init()
-  
-  init() {
-    setup()
-  }
-  
-  func setup() {
-    FaceSDK.service.initializeFace().sink { [unowned self] completion in
-      switch completion {
-      case .finished:
-        self.isInitialized = true
-      case .failure(let error):
-        print(error.localizedDescription)
-      }
-    } receiveValue: { _ in
-      
-    }.store(in: &cancellables)
+  func initialize() {
+    FaceSDK.service.initialize() { [weak self] success, error in
+        if success {
+            self?.isInitialized = true
+        } else if let error = error {
+            print(error.localizedDescription)
+        }
+    }
     
     let uiConfiguration = UIConfiguration {
       $0.setColor(.blue, forItem: .CameraScreenFrontHintLabelText)
@@ -71,6 +65,10 @@ class Face {
     }
     
     FaceSDK.service.customization.configuration = uiConfiguration
+  }
+  
+  func deinitialize() {
+    FaceSDK.service.deinitialize()
   }
   
   func showFaceCapture() {
@@ -117,20 +115,4 @@ class Face {
     similarityPercentage = 0
   }
   
-}
-
-extension FaceSDK {
-  func initializeFace() -> AnyPublisher<Bool, Error> {
-    Deferred {
-      Future<Bool, Error> { promise in
-        FaceSDK.service.initialize() { success, error in
-          if let error = error {
-            promise(.failure(error))
-          } else {
-            promise(.success(success))
-          }
-        }
-      }
-    }.eraseToAnyPublisher()
-  }
 }

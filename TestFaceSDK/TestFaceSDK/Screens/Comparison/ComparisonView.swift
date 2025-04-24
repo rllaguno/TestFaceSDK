@@ -9,14 +9,10 @@ import SwiftUI
 
 struct ComparisonView: View {
   @Binding var face: Face
-  @State private var completedLoading: Bool = false
-  let timer = Timer.publish(every: 4, on: .main, in: .common).autoconnect()
   
   var body: some View {
     VStack {
-      Text("Resultados")
-        .font(.largeTitle)
-        .bold()
+      Title(title: "Resultados")
       
       Spacer()
       
@@ -32,25 +28,17 @@ struct ComparisonView: View {
           }
         }
         
-        if face.faceCaptureResultsReady {
-          if completedLoading {
-            VStack(alignment: .leading, spacing: 10) {
-              
-              Text("\(face.similarityPercentage)%")
-                .font(.system(size: 150, weight: .bold))
-              
-              Text("de similitud")
-                .font(.system(size: 20, weight: .bold))
-            }
-          } else {
-            ProgressView()
-              .onReceive(timer) { time in
-                withAnimation(.easeOut(duration: 1.5)) {
-                  completedLoading = true
-                }
-                timer.upstream.connect().cancel()
-              }
+        if face.matchFaceResponseReady {
+          VStack(alignment: .leading, spacing: 10) {
+            
+            Text("\(face.similarityPercentage)%")
+              .font(.system(size: 150, weight: .bold))
+            
+            Text("de similitud")
+              .font(.system(size: 20, weight: .bold))
           }
+        } else {
+          ProgressView()
         }
         
       }
@@ -60,6 +48,7 @@ struct ComparisonView: View {
       Button {
         face.currentNavigation = .instructions
         face.reset()
+        face.deinitialize()
       } label: {
         BlueButton(title: "Volver al inicio")
       }

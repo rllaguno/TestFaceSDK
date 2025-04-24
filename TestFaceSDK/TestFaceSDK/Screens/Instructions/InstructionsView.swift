@@ -12,9 +12,7 @@ struct InstructionsView: View {
   
   var body: some View {
     VStack(spacing: 50) {
-      Text("Instrucciones")
-        .font(.largeTitle.bold())
-        .foregroundStyle(.primary)
+      Title(title: "Instrucciones")
       
       Spacer()
       
@@ -29,6 +27,7 @@ struct InstructionsView: View {
       Spacer()
       
       Button{
+        face.initialize()
         face.currentNavigation = .faceCapture
       } label: {
         BlueButton(title: "Iniciar")

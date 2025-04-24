@@ -12,25 +12,24 @@ struct NavigationView: View {
   
   var body: some View {
     ZStack {
-      if face.isInitialized {
-        switch face.currentNavigation {
-        case .instructions:
-          InstructionsView(face: $face)
-          
-        case .faceCapture:
+      switch face.currentNavigation {
+      case .instructions:
+        InstructionsView(face: $face)
+        
+      case .faceCapture:
+        if face.isInitialized {
           FaceCaptureView(face: $face)
-          
-        case .gallery:
-          GalleryView(face: $face)
-          
-        case .comparison:
-          ComparisonView(face: $face)
+        } else {
+          ProgressView()
         }
-      } else {
-        ProgressView()
+        
+      case .gallery:
+        GalleryView(face: $face)
+        
+      case .comparison:
+        ComparisonView(face: $face)
       }
     }
-    
   }
   
 }
