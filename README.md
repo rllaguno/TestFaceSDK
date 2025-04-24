@@ -25,7 +25,17 @@ A través del interfaz el usuario puede:
 - Control de navegación basado en estados mediante un enum NavigationIndex y un switch en la vista principal.
 
 ## Decisiones técnicas destacadas
-- 
+**Navegación centralizada**
+- La navegación se maneja de manera centralizada a través de un enum con cambio de estados manejado por el objeto observable.
+
+**Diseño por componentes independientes**
+- Separación clara de responsabilidades con componentes independientes para cada etapa del proceso. Vistas dedicadas para instrucciones, captura facial, selección de galería y comparación.
+
+**Manejo de ciclo de vida**
+- Funciones de initialize() y deinitialize() permiten el uso eficiente de recursos en la aplicación.
+
+**Personalización de UI de FaceSDK**
+- Configuración personalizada de la interfaz del SDK mediante UIConfiguration para mantener coherencia con el diseño de la app.
 
 ## Mejoras
 1. Botón de salir durante el proceso para cancelar el flujo.
